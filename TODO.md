@@ -2,15 +2,16 @@
 
 ## High Priority
 
-- [ ] Implement ESP drawing logic (boxes, names, health bars, tracers)
-- [ ] Add ESP object pooling for performance
+- [x] Implement ESP drawing logic (boxes, names, health bars, tracers)
+- [x] Add ESP object pooling for performance
 - [ ] Complete Aimbot target selection and aiming
 - [ ] Implement Movement speed and jump modifications
 - [ ] Add Fly functionality
-- [ ] Connect UI toggles to feature enable/disable
+- [x] Connect UI toggles to feature enable/disable
 - [ ] Add panic key functionality to disable all features
 - [ ] Implement config save/load properly
 - [ ] Add error handling and fail-safes
+- [ ] Add a SaveManger to save settings it autosaves when changes
 
 ## Medium Priority
 
@@ -47,6 +48,11 @@
 - [x] Add safety checks and error handling in main.lua
 - [x] Create README.md with usage instructions
 - [x] Create TODO.md for tracking progress
+- [x] Rename project to CloudyHub
+- [x] Add creator credits and GitHub link in settings
+- [x] Fix MouseButton2 keybind issue in aimbot.lua
+- [x] Update module loading to use loadstring from GitHub
+- [x] Update config folder name to CloudyHubConfigs
 
 ## Notes
 

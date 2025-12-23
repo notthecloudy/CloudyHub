@@ -14,13 +14,19 @@ function Aimbot:Init(state)
 
     -- Keybind handling
     self.UserInputService.InputBegan:Connect(function(input, gameProcessed)
-        if not gameProcessed and input.KeyCode == Enum.KeyCode[self.State.AimKey] then
-            self.AimKeyHeld = true
+        if not gameProcessed then
+            if input.UserInputType == Enum.UserInputType.MouseButton2 and self.State.AimKey == "MouseButton2" then
+                self.AimKeyHeld = true
+            elseif input.KeyCode == Enum.KeyCode[self.State.AimKey] then
+                self.AimKeyHeld = true
+            end
         end
     end)
 
     self.UserInputService.InputEnded:Connect(function(input, gameProcessed)
-        if input.KeyCode == Enum.KeyCode[self.State.AimKey] then
+        if input.UserInputType == Enum.UserInputType.MouseButton2 and self.State.AimKey == "MouseButton2" then
+            self.AimKeyHeld = false
+        elseif input.KeyCode == Enum.KeyCode[self.State.AimKey] then
             self.AimKeyHeld = false
         end
     end)
