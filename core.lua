@@ -1,4 +1,4 @@
--- Core Module for MyHub
+-- Core Module for CloudyHub
 -- Manages global state, feature registration, and update loops
 
 local Core = {}
@@ -78,10 +78,10 @@ function Core:Init()
     end)
 
     -- Load feature modules
-    self:RegisterFeature("ESP", require(game:GetService("ReplicatedStorage"):WaitForChild("MyHub").Features.ESP))
-    self:RegisterFeature("Aimbot", require(game:GetService("ReplicatedStorage"):WaitForChild("MyHub").Features.Aimbot))
-    self:RegisterFeature("Movement", require(game:GetService("ReplicatedStorage"):WaitForChild("MyHub").Features.Movement))
-    self:RegisterFeature("Misc", require(game:GetService("ReplicatedStorage"):WaitForChild("MyHub").Features.Misc))
+    self:RegisterFeature("ESP", loadstring(game:HttpGet("https://raw.githubusercontent.com/notthecloudy/CloudyHub/refs/heads/main/features/esp.lua"))())
+    self:RegisterFeature("Aimbot", loadstring(game:HttpGet("https://raw.githubusercontent.com/notthecloudy/CloudyHub/refs/heads/main/features/aimbot.lua"))())
+    self:RegisterFeature("Movement", loadstring(game:HttpGet("https://raw.githubusercontent.com/notthecloudy/CloudyHub/refs/heads/main/features/movement.lua"))())
+    self:RegisterFeature("Misc", loadstring(game:HttpGet("https://raw.githubusercontent.com/notthecloudy/CloudyHub/refs/heads/main/features/misc.lua"))())
 
     -- Load config
     self:LoadConfig()
