@@ -42,6 +42,16 @@ function Aimbot:Init(state)
 end
 
 function Aimbot:UpdateRender(dt)
+    -- Update FOV Circle
+    if self.State.AimbotEnabled and self.State.FOVCircleEnabled then
+        local centerScreen = Vector2.new(self.Camera.ViewportSize.X / 2, self.Camera.ViewportSize.Y / 2)
+        self.FOVCircle.Position = centerScreen
+        self.FOVCircle.Radius = self.State.AimFOV
+        self.FOVCircle.Visible = true
+    else
+        self.FOVCircle.Visible = false
+    end
+
     if not self.State.AimbotEnabled or not self.AimKeyHeld then return end
 
     self:SelectTarget()
@@ -113,8 +123,13 @@ function Aimbot:AimAtTarget(dt)
     local targetCFrame = CFrame.lookAt(cameraPos, targetPos)
     local currentCFrame = self.Camera.CFrame
 
-    -- Smooth aiming
-    self.Camera.CFrame = currentCFrame:Lerp(targetCFrame, self.State.AimSmoothing * dt * 10)
+    if self.State.SilentAimEnabled then
+        -- Silent Aim: instant aiming without camera movement smoothing
+        self.Camera.CFrame = targetCFrame
+    else
+        -- Smooth aiming
+        self.Camera.CFrame = currentCFrame:Lerp(targetCFrame, self.State.AimSmoothing * dt * 10)
+    end
 end
 
 function Aimbot:Cleanup()
