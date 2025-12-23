@@ -114,3 +114,13 @@ MovementTab:CreateSlider({
         Core.State.FlySpeed = val
     end
 })
+
+-- Error handling and initialization
+local success, err = pcall(function()
+    Core:Init()
+    Core:InitSaveManager()
+end)
+if not success then
+    warn("Failed to initialize CloudyHub: " .. err)
+    -- Fallback or cleanup
+end

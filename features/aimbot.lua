@@ -33,7 +33,7 @@ function Aimbot:Init(state)
 end
 
 function Aimbot:UpdateRender(dt)
-    if not self.Enabled or not self.AimKeyHeld then return end
+    if not self.State.AimbotEnabled or not self.AimKeyHeld then return end
 
     self:SelectTarget()
     if self.CurrentTarget then

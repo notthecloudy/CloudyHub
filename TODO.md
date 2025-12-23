@@ -4,14 +4,14 @@
 
 - [x] Implement ESP drawing logic (boxes, names, health bars, tracers)
 - [x] Add ESP object pooling for performance
-- [ ] Complete Aimbot target selection and aiming
-- [ ] Implement Movement speed and jump modifications
-- [ ] Add Fly functionality
+- [x] Complete Aimbot target selection and aiming
+- [x] Implement Movement speed and jump modifications
+- [x] Add Fly functionality
 - [x] Connect UI toggles to feature enable/disable
-- [ ] Add panic key functionality to disable all features
-- [ ] Implement config save/load properly
-- [ ] Add error handling and fail-safes
-- [ ] Add a SaveManger to save settings it autosaves when changes
+- [x] Add panic key functionality to disable all features
+- [x] Implement config save/load properly
+- [x] Add error handling and fail-safes
+- [x] Add a SaveManger to save settings it autosaves when changes
 
 ## Medium Priority
 
@@ -22,7 +22,7 @@
 - [ ] Implement Chams in ESP
 - [ ] Add FOV circle visualization
 - [ ] Implement auto-farm or other misc features
-- [ ] Add UI animations and polish
+- [ ] Polish the system, UI is handled by Rayfield
 
 ## Low Priority
 

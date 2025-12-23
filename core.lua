@@ -63,7 +63,7 @@ function Core:Init()
     -- Set up update loops
     self.Connections.RenderStepped = game:GetService("RunService").RenderStepped:Connect(function(dt)
         for _, feature in pairs(self.Features) do
-            if feature.UpdateRender and feature.Enabled then
+            if feature.UpdateRender then
                 feature:UpdateRender(dt)
             end
         end
@@ -71,7 +71,7 @@ function Core:Init()
 
     self.Connections.Heartbeat = game:GetService("RunService").Heartbeat:Connect(function(dt)
         for _, feature in pairs(self.Features) do
-            if feature.UpdateHeartbeat and feature.Enabled then
+            if feature.UpdateHeartbeat then
                 feature:UpdateHeartbeat(dt)
             end
         end
@@ -83,13 +83,70 @@ function Core:Init()
     self:RegisterFeature("Movement", require(game:GetService("ReplicatedStorage"):WaitForChild("MyHub").Features.Movement))
     self:RegisterFeature("Misc", require(game:GetService("ReplicatedStorage"):WaitForChild("MyHub").Features.Misc))
 
+    -- Load config
+    self:LoadConfig()
+
     print("Core Initialized")
+end
+
+function Core:LoadConfig()
+    local success, data = pcall(function()
+        return game:GetService("HttpService"):JSONDecode(readfile("CloudyHubConfigs/config.json"))
+    end)
+    if success and data then
+        for key, value in pairs(data) do
+            if self.State[key] ~= nil then
+                self.State[key] = value
+            end
+        end
+        print("Config loaded successfully")
+    else
+        print("No config found, using defaults")
+    end
+end
+
+function Core:SaveConfig()
+    local configFolder = "CloudyHubConfigs"
+    if not isfolder(configFolder) then
+        makefolder(configFolder)
+    end
+
+    local success, err = pcall(function()
+        writefile(configFolder .. "/config.json", game:GetService("HttpService"):JSONEncode(self.State))
+    end)
+    if success then
+        print("Config saved successfully")
+    else
+        warn("Failed to save config: " .. err)
+    end
+end
+
+-- SaveManager: Auto-save on changes
+function Core:InitSaveManager()
+    -- Hook into state changes (simple polling for now)
+    self.LastState = table.clone(self.State)
+    self.SaveConnection = game:GetService("RunService").Heartbeat:Connect(function()
+        local changed = false
+        for key, value in pairs(self.State) do
+            if self.LastState[key] ~= value then
+                changed = true
+                break
+            end
+        end
+        if changed then
+            self:SaveConfig()
+            self.LastState = table.clone(self.State)
+        end
+    end)
 end
 
 function Core:Cleanup()
     -- Disconnect loops
     for _, conn in pairs(self.Connections) do
         conn:Disconnect()
+    end
+    if self.SaveConnection then
+        self.SaveConnection:Disconnect()
     end
 
     -- Cleanup features

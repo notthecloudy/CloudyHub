@@ -224,7 +224,7 @@ function ESP:OnCharacterRemoved(player)
 end
 
 function ESP:UpdateRender(dt)
-    if not self.Enabled then return end
+    if not self.State.ESPEnabled then return end
 
     for player, data in pairs(self.Players) do
         if data.Character and data.Humanoid and data.Humanoid.Health > 0 then
