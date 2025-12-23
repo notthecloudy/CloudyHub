@@ -66,6 +66,26 @@ function Misc:GetHumanoid()
     return character and character:FindFirstChild("Humanoid")
 end
 
+function Misc:ItemGrab()
+    for _, item in ipairs(workspace:GetDescendants()) do
+        if item:IsA("Tool") or item:IsA("Part") and item.CanCollide == false then
+            if self.LocalPlayer.Character and self.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                item.CFrame = self.LocalPlayer.Character.HumanoidRootPart.CFrame
+            end
+        end
+    end
+end
+
+function Misc:ServerHop()
+    local servers = game:GetService("HttpService"):JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"))
+    for _, server in ipairs(servers.data) do
+        if server.playing < server.maxPlayers then
+            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, server.id)
+            break
+        end
+    end
+end
+
 function Misc:Cleanup()
     self:DisableAntiAFK()
 end

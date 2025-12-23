@@ -6,11 +6,20 @@ local Aimbot = {}
 Aimbot.Enabled = false
 Aimbot.CurrentTarget = nil
 Aimbot.AimKeyHeld = false
+Aimbot.SilentAimEnabled = false
+Aimbot.OriginalMouse = nil
 
 function Aimbot:Init(state)
     self.State = state
     self.Camera = workspace.CurrentCamera
     self.UserInputService = game:GetService("UserInputService")
+
+    -- FOV Circle
+    self.FOVCircle = Drawing.new("Circle")
+    self.FOVCircle.Thickness = 1
+    self.FOVCircle.Filled = false
+    self.FOVCircle.Color = Color3.new(1, 1, 1)
+    self.FOVCircle.Visible = false
 
     -- Keybind handling
     self.UserInputService.InputBegan:Connect(function(input, gameProcessed)
@@ -69,7 +78,8 @@ function Aimbot:SelectTarget()
                             local distanceToMouse = (screenPos - mousePos).Magnitude
 
                             if distanceToCenter <= self.State.AimFOV then
-                                local score = distanceToCenter * 0.5 + distanceToMouse * 0.3 + (character.Humanoid.Health / character.Humanoid.MaxHealth) * 100
+                                local healthScore = (character.Humanoid.Health / character.Humanoid.MaxHealth) * 100
+                                local score = distanceToCenter * 0.5 + distanceToMouse * 0.3 + healthScore
                                 if score < bestScore then
                                     bestScore = score
                                     bestTarget = {Player = player, Part = targetPart, ScreenPos = screenPos}
@@ -110,6 +120,7 @@ end
 function Aimbot:Cleanup()
     self.CurrentTarget = nil
     self.AimKeyHeld = false
+    self.FOVCircle.Visible = false
 end
 
 return Aimbot

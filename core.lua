@@ -13,6 +13,7 @@ Core.State = {
     AimPrediction = false,
     AimBone = "Head",
     SilentAimEnabled = false,
+    AimbotFOVCircle = false,
 
     -- Visuals
     ESPEnabled = false,
@@ -33,6 +34,7 @@ Core.State = {
     JumpPowerValue = 50,
     FlyEnabled = false,
     FlySpeed = 50,
+    BunnyHopEnabled = false,
 
     -- Misc
     AutoRespawn = false,
@@ -78,10 +80,10 @@ function Core:Init()
     end)
 
     -- Load feature modules
-    self:RegisterFeature("ESP", loadstring(game:HttpGet("https://raw.githubusercontent.com/notthecloudy/CloudyHub/refs/heads/main/features/esp.lua"))())
-    self:RegisterFeature("Aimbot", loadstring(game:HttpGet("https://raw.githubusercontent.com/notthecloudy/CloudyHub/refs/heads/main/features/aimbot.lua"))())
-    self:RegisterFeature("Movement", loadstring(game:HttpGet("https://raw.githubusercontent.com/notthecloudy/CloudyHub/refs/heads/main/features/movement.lua"))())
-    self:RegisterFeature("Misc", loadstring(game:HttpGet("https://raw.githubusercontent.com/notthecloudy/CloudyHub/refs/heads/main/features/misc.lua"))())
+    self:RegisterFeature("ESP", loadstring(readfile("features/esp.lua"))())
+    self:RegisterFeature("Aimbot", loadstring(readfile("features/aimbot.lua"))())
+    self:RegisterFeature("Movement", loadstring(readfile("features/movement.lua"))())
+    self:RegisterFeature("Misc", loadstring(readfile("features/misc.lua"))())
 
     -- Load config
     self:LoadConfig()

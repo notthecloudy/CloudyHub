@@ -64,6 +64,11 @@ function Movement:UpdateHeartbeat(dt)
         self.Humanoid.JumpPower = self.OriginalJumpPower or 50
     end
 
+    -- BunnyHop
+    if self.BunnyHopEnabled then
+        self:UpdateBunnyHop(dt)
+    end
+
     -- Fly
     if self.State.FlyEnabled then
         self:StartFly()

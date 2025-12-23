@@ -83,6 +83,23 @@ CombatTab:CreateToggle({
         Core.State.AimPrediction = val
     end
 })
+CombatTab:CreateToggle({
+    Name = "Silent Aim",
+    CurrentValue = false,
+    Flag = "SilentAim",
+    Callback = function(val)
+        Core.State.SilentAimEnabled = val
+    end
+})
+CombatTab:CreateToggle({
+    Name = "FOV Circle",
+    CurrentValue = false,
+    Flag = "AimbotFOVCircle",
+    Callback = function(val)
+        Core.State.AimbotFOVCircle = val
+        Core.Features.Aimbot.FOVCircle.Visible = val
+    end
+})
 
 -- Visuals Tab
 VisualsTab:CreateSection("ESP")
@@ -124,6 +141,27 @@ VisualsTab:CreateToggle({
     Flag = "ESPTracers",
     Callback = function(val)
         Core.State.ESPTracers = val
+    end
+})
+VisualsTab:CreateToggle({
+    Name = "Chams",
+    CurrentValue = false,
+    Flag = "ESPChams",
+    Callback = function(val)
+        Core.State.ESPChams = val
+        -- Update existing chams
+        for player, data in pairs(Core.Features.ESP.Players) do
+            if data.Character then
+                if val then
+                    Core.Features.ESP:CreateChams(player, data.Character)
+                else
+                    if data.Chams then
+                        data.Chams:Destroy()
+                        data.Chams = nil
+                    end
+                end
+            end
+        end
     end
 })
 VisualsTab:CreateToggle({
@@ -206,6 +244,17 @@ MovementTab:CreateSlider({
     end
 })
 
+MovementTab:CreateSection("BunnyHop")
+MovementTab:CreateToggle({
+    Name = "BunnyHop",
+    CurrentValue = false,
+    Flag = "BunnyHopToggle",
+    Callback = function(val)
+        Core.State.BunnyHopEnabled = val
+        Core.Features.Movement.BunnyHopEnabled = val
+    end
+})
+
 -- Misc Tab
 MiscTab:CreateSection("Utilities")
 MiscTab:CreateToggle({
@@ -224,6 +273,17 @@ MiscTab:CreateToggle({
         Core.State.AntiAFK = val
     end
 })
+
+MiscTab:CreateSection("Auto Farm")
+MiscTab:CreateButton({
+    Name = "Teleport to Random Player",
+    Callback = function()
+        Core.Features.Misc:TeleportToRandomPlayer()
+    end
+})
+
+MiscTab:CreateSection("Credits")
+MiscTab:CreateLabel("Created by notthecloudy")
 
 -- Error handling and initialization
 local success, err = pcall(function()

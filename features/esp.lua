@@ -133,6 +133,7 @@ function ESP:AddPlayer(player)
         Name = nil,
         HealthBar = nil,
         Tracer = nil,
+        Chams = nil,
         Character = nil,
         Humanoid = nil
     }
@@ -195,6 +196,11 @@ function ESP:OnCharacterAdded(player, character)
     if self.State.ESPTracers then
         self.Players[player].Tracer = self:GetDrawingObject("Tracers")
     end
+
+    -- Chams
+    if self.State.ESPChams then
+        self:CreateChams(player, character)
+    end
 end
 
 function ESP:OnCharacterRemoved(player)
@@ -226,6 +232,8 @@ end
 function ESP:UpdateRender(dt)
     if not self.State.ESPEnabled then return end
 
+    self.UpdateTimer = (self.UpdateTimer or 0) + dt
+
     for player, data in pairs(self.Players) do
         if data.Character and data.Humanoid and data.Humanoid.Health > 0 then
             local rootPart = data.Character:FindFirstChild("HumanoidRootPart")
@@ -238,7 +246,12 @@ function ESP:UpdateRender(dt)
                     end
 
                     if not isTeam then
-                        self:UpdateESP(player, data, distance)
+                        -- Update close players every frame, distant players less frequently
+                        local updateFrequency = distance > 500 and 0.5 or 0 -- 0.5 seconds for distant, every frame for close
+                        if not data.LastUpdate or (self.UpdateTimer - data.LastUpdate) >= updateFrequency then
+                            self:UpdateESP(player, data, distance)
+                            data.LastUpdate = self.UpdateTimer
+                        end
                     else
                         self:HideESP(data)
                     end
@@ -345,10 +358,29 @@ function ESP:HideESP(data)
     if data.Tracer then data.Tracer.Visible = false end
 end
 
+function ESP:CreateChams(player, character)
+    if self.Players[player].Chams then
+        self.Players[player].Chams:Destroy()
+    end
+
+    local highlight = Instance.new("Highlight")
+    highlight.Adornee = character
+    highlight.FillColor = self.State.ESPColor
+    highlight.OutlineColor = Color3.new(1, 1, 1)
+    highlight.FillTransparency = 0.5
+    highlight.OutlineTransparency = 0
+    highlight.Parent = character
+
+    self.Players[player].Chams = highlight
+end
+
 function ESP:Cleanup()
     -- Hide all ESP elements
     for _, data in pairs(self.Players) do
         self:HideESP(data)
+        if data.Chams then
+            data.Chams:Destroy()
+        end
     end
 
     -- Clear players table
