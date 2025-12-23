@@ -35,7 +35,7 @@ local MovementTab = Window:CreateTab("Movement", 4483362458)
 local MiscTab = Window:CreateTab("Misc", 4483362458)
 
 -- Core Module
-local Core = loadstring(game:HttpGet("https://raw.githubusercontent.com/CloudyHub/CloudyHub/main/core.lua"))()
+local Core = loadstring(game:HttpGet("https://raw.githubusercontent.com/notthecloudy/CloudyHub/refs/heads/main/core.lua"))()
 
 -- Combat Tab
 CombatTab:CreateSection("Aimbot")
